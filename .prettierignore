@@ -1,0 +1,16 @@
+dist
+build
+coverage
+
+node_modules
+
+package-lock.json
+pnpm-lock.yaml
+yarn.lock
+*.log
+
+public
+vendor
+*.svg
+*.png
+*.jpg
