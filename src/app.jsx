@@ -1,9 +1,8 @@
-import { SectionSetUp, PersonalProfile, LinksSection, SkillsSection, ExperienceSection} from "./components/leftpanel";
+import { SectionSetUp, PersonalProfile, LinksSection, SkillsSection, ExperienceSection, EducationSection} from "./components/leftpanel";
 import Header from "./components/header";
-import { User, Link, Code, BriefcaseBusiness, } from 'lucide-react'
+import { User, Link, Code, BriefcaseBusiness, GraduationCap} from 'lucide-react'
 
 export default function App () {
-    const {ui} = SkillsSection()
     return (
         <>
         <Header />
@@ -26,14 +25,22 @@ export default function App () {
 
                 <SectionSetUp
                 sectionName="Technical Skills"
-                sectionIcon={<Code />} children={ui}
+                sectionIcon={<Code />}
                 >
+                    {SkillsSection().ui}
+                </SectionSetUp>
+
+                <SectionSetUp 
+                sectionName="Educational Background"
+                sectionIcon={<GraduationCap />}
+                >
+                    <EducationSection/>
                 </SectionSetUp>
                 <SectionSetUp
                 sectionName="Experience"
                 sectionIcon={<BriefcaseBusiness />}
                 >
-                <ExperienceSection />
+                {ExperienceSection().ui}
                 </SectionSetUp>
             </div>
             </div>

@@ -1,5 +1,8 @@
+// This file contains all the components related to the left panel of DevResume, including SectionSetUp component and the specific sections for Personal Profile, Links, Skills, Educational Background and Experience.
 import { useState } from 'react'
 import { ChevronDown, ChevronUp } from 'lucide-react'
+
+// SectionSetUp - It handles opening and closing of the sections of the left-panel, it also provide basic structure of those components
 
 export function SectionSetUp({
   sectionName,
@@ -42,6 +45,8 @@ export function SectionSetUp({
   )
 }
 
+// InputField - Simple reusable input component with label, it is used in multiple sections of the left panel to maintain consistent styling and structure across different input fields.
+
 function InputField({
   id,
   label,
@@ -64,6 +69,8 @@ function InputField({
     </>
   )
 }
+
+// PersonalProfile - This component contains the form fields for the personal profile section.
 
 export function PersonalProfile() {
   const inputClass =
@@ -142,7 +149,17 @@ export function PersonalProfile() {
   )
 }
 
+// LinksSection - This component contains the form fields for the links section.
+
 export function LinksSection() {
+  const [isModalOpen, setIsModalOpen] = useState(false)
+  const [openCustomField, setOpenCustomField] = useState(false)
+  const [inputValue, setInputValue] = useState("")
+  // let customLinkLabel =""
+  function handleAddLink() {
+    setIsModalOpen(true)
+  }
+
   const labelClass =
     'mb-2 block text-xs font-medium tracking-wide text-slate-400 uppercase'
   const inputClass =
@@ -187,19 +204,44 @@ export function LinksSection() {
             placeholder="https://your-twitter-account.com"
           />
         </div>
+        <div>
+          {openCustomField && <AddSubSectionBtn openSubSection={openCustomField}>
+            <InputField
+            id={inputValue}
+            label= {inputValue}
+            inputClass={inputClass}
+            labelClass={labelClass}
+            placeholder="https://your-link.com"
+          />
+            </AddSubSectionBtn>}
+        </div>
       </div>
       <div className="flex items-center justify-end gap-2 pt-4">
-        <button className="cursor-pointer rounded-lg border border-slate-700 bg-slate-800 px-5 py-2.5 text-sm font-semibold text-slate-100 transition-all duration-200 hover:bg-slate-700 active:bg-slate-600">
+        <button className="cursor-pointer rounded-lg border border-slate-700 bg-slate-800 px-5 py-2.5 text-sm font-semibold text-slate-100 transition-all duration-200 hover:bg-slate-700 active:bg-slate-600" onClick={handleAddLink}>
           Add New Link
         </button>
       </div>
+      {/* Modal for adding new link */}
+      {isModalOpen && (
+        <AddCategoryModal
+          title="Link Name"
+          placeholder="e.g., Facebook Page"
+          buttonText="Add Name"
+          onClose={() => setIsModalOpen(false)}
+          onSubmit={(value) => {
+            setInputValue(value)
+            setIsModalOpen(false)
+            setOpenCustomField(true)
+          }}
+        />
+      )}
     </div>
   )
 }
 
+// SkillsSection - This component contains the form fields for the skills section, it also allows users to add custom skill categories and manage skills within each category. The state of the skills and categories is lifted up to this component to allow for better management and data collection when generating the resume.
+
 export function SkillsSection() {
-  // State lifting: track which subsection is open
-  const [openCategory, setOpenCategory] = useState('languages')
   const [customCategories, setCustomCategories] = useState([])
   const [showModal, setShowModal] = useState(false)
 
@@ -213,7 +255,8 @@ export function SkillsSection() {
   })
 
   const defaultCategories = [
-    { id: 'languages', label: 'Languages & Frameworks' },
+    { id: 'languages', label: 'Languages' },
+    { id: 'frameworks', label: 'Frameworks' },
     { id: 'libraries', label: 'Libraries' },
     { id: 'tools', label: 'Tools' },
     { id: 'infrastructure', label: 'Infrastructure' },
@@ -224,7 +267,8 @@ export function SkillsSection() {
 
   // Add skill to category
   const addSkill = (categoryId, skill) => {
-    if (!skill.trim()) return
+    // Prevent adding empty skills
+    if (!skill.trim()) return 
     setSkills((prev) => ({
       ...prev,
       [categoryId]: [...(prev[categoryId] || []), skill],
@@ -243,6 +287,7 @@ export function SkillsSection() {
   const handleAddCustomCategory = (categoryName) => {
     if (categoryName && categoryName.trim()) {
       const newCategory = {
+        // Using timestamp for unique ID
         id: `custom_${Date.now()}`,
         label: categoryName,
       }
@@ -251,7 +296,6 @@ export function SkillsSection() {
         ...prev,
         [newCategory.id]: [],
       }))
-      setOpenCategory(newCategory.id)
     }
     setShowModal(false)
   }
@@ -275,10 +319,6 @@ export function SkillsSection() {
           key={category.id}
           categoryId={category.id}
           label={category.label}
-          isOpen={openCategory === category.id}
-          onToggle={() =>
-            setOpenCategory(openCategory === category.id ? null : category.id)
-          }
           skills={skills[category.id] || []}
           onAddSkill={(skill) => addSkill(category.id, skill)}
           onRemoveSkill={(index) => removeSkill(category.id, index)}
@@ -305,13 +345,11 @@ export function SkillsSection() {
 
   const values = getSkillsData()
 
-  return {ui, values }
+  return { ui, values }
 }
 
 function SkillSubsection({
   label,
-  isOpen,
-  onToggle,
   skills,
   onAddSkill,
   onRemoveSkill,
@@ -329,6 +367,12 @@ function SkillSubsection({
     }
   }
 
+  const [isOpen, setIsOpen] = useState(open)
+
+  function handleClick() {
+    setIsOpen(!isOpen)
+  }
+
   const inputClass =
     'flex-1 rounded-lg border border-slate-700 bg-slate-800 px-3 py-2.5 text-sm text-slate-100 placeholder-slate-500 transition-all duration-150 focus:border-blue-500 focus:outline-none'
 
@@ -336,7 +380,7 @@ function SkillSubsection({
     <div className="overflow-hidden rounded-lg border border-slate-700 bg-slate-800">
       {/* Header */}
       <div
-        onClick={onToggle}
+        onClick={handleClick}
         className="flex h-12 w-full cursor-pointer items-center gap-3 border-b border-slate-700 bg-slate-800 px-4 transition-all duration-200 hover:bg-slate-700"
       >
         <span className="text-base font-semibold text-slate-100">{label}</span>
@@ -400,7 +444,7 @@ function SkillSubsection({
   )
 }
 
-function AddCategoryModal({ onClose, onSubmit }) {
+function AddCategoryModal({ onClose, onSubmit, title, placeholder, buttonText }) {
   const [inputValue, setInputValue] = useState('')
 
   const handleSubmit = () => {
@@ -422,13 +466,13 @@ function AddCategoryModal({ onClose, onSubmit }) {
       <div className="w-full max-w-md rounded-lg border border-slate-700 bg-slate-800 p-6 shadow-lg">
         {/* Header */}
         <h2 className="mb-4 text-lg font-semibold text-slate-100">
-          Add Custom Skill Category
+          {title || 'Add New Skill Category'}
         </h2>
 
         {/* Input */}
         <input
           type="text"
-          placeholder="e.g., Soft Skills, Databases, Languages"
+          placeholder={placeholder || "e.g., Soft Skills, Databases, Languages"}
           value={inputValue}
           onChange={(e) => setInputValue(e.target.value)}
           onKeyDown={handleKeyPress}
@@ -449,7 +493,7 @@ function AddCategoryModal({ onClose, onSubmit }) {
             disabled={!inputValue.trim()}
             className="rounded-lg bg-blue-500 px-5 py-2.5 text-sm font-semibold text-white transition-all duration-200 hover:bg-blue-600 active:bg-blue-700 disabled:cursor-not-allowed disabled:opacity-50"
           >
-            Add Category
+            {buttonText || 'Add Category'}
           </button>
         </div>
       </div>
@@ -458,12 +502,31 @@ function AddCategoryModal({ onClose, onSubmit }) {
 }
 
 export function ExperienceSection() {
+  const [responsibilities, setResponsibilities] = useState([])
+  const [inputValue, setInputValue] = useState('')
+
   const labelClass =
     'mb-2 block text-xs font-medium tracking-wide text-slate-400 uppercase'
   const inputClass =
     'w-full rounded-lg border border-slate-700 bg-slate-800 px-3 py-2.5 text-sm text-slate-100 placeholder-slate-500 transition-all duration-150 focus:border-blue-500 focus:outline-none'
-    
-  return (
+
+  const addResponsibility = () => {
+    if (!inputValue.trim()) return
+    setResponsibilities((prev) => [...prev, inputValue])
+    setInputValue('')
+  }
+
+  const removeResponsibility = (index) => {
+    setResponsibilities((prev) => prev.filter((_, i) => i !== index))
+  }
+
+  const handleKeyPress = (e) => {
+    if (e.key === 'Enter') {
+      addResponsibility()
+    }
+  }
+
+  const ui = (
     <div className="space-y-4 border-t border-slate-700 px-4 py-6">
       <div className="grid grid-cols-2 gap-4">
         <div>
@@ -483,20 +546,139 @@ export function ExperienceSection() {
           />
         </div>
         <div>
-          <InputField id= "date" label= "start date" type='date' inputClass={inputClass} labelClass={labelClass}/>
+          <InputField
+            id="date"
+            label="start date"
+            type="date"
+            inputClass={inputClass}
+            labelClass={labelClass}
+          />
         </div>
         <div>
-          <InputField id= "date" label= "end date" type='date' inputClass={inputClass} labelClass={labelClass}/>
+          <InputField
+            id="date"
+            label="end date"
+            type="date"
+            inputClass={inputClass}
+            labelClass={labelClass}
+          />
         </div>
       </div>
-      <div className='flex cursor-pointer items-center gap-2'>
-        <input type="checkbox" className="h-5 w-5 cursor-pointer rounded-sm border-2 border-slate-700 bg-blue-500"/>
-        <label className='cursor-pointer text-sm text-slate-100'>
+
+      {/* Currently Work Here Checkbox */}
+      <div className="flex cursor-pointer items-center gap-2">
+        <input
+          type="checkbox"
+          className="h-5 w-5 cursor-pointer rounded-sm border-2 border-slate-700 bg-blue-500"
+        />
+        <label className="cursor-pointer text-sm text-slate-100">
           Currently Work Here
         </label>
-        
       </div>
-      
+
+      {/* Responsibilities Section */}
+      <div>
+        <label className={labelClass}>Add Responsibilities</label>
+
+        {/* Responsibilities Tags */}
+        {responsibilities.length > 0 && (
+          <div className="mb-3 flex flex-wrap gap-2">
+            {responsibilities.map((resp, index) => (
+              <span
+                key={index}
+                className="inline-flex h-7 items-center gap-1.5 rounded-full bg-blue-900 px-3 py-1 text-xs font-medium text-blue-300"
+              >
+                {resp}
+                <button
+                  onClick={() => removeResponsibility(index)}
+                  className="ml-0.5 cursor-pointer opacity-70 transition-opacity duration-150 hover:opacity-100"
+                >
+                  ×
+                </button>
+              </span>
+            ))}
+          </div>
+        )}
+
+        {/* Input & Add Button */}
+        <div className="flex gap-2">
+          <input
+            type="text"
+            placeholder="e.g., Architected microservices..."
+            value={inputValue}
+            onChange={(e) => setInputValue(e.target.value)}
+            onKeyDown={handleKeyPress}
+            className={inputClass}
+          />
+          <button
+            onClick={addResponsibility}
+            className="rounded-lg bg-slate-700 px-4 py-2.5 text-white transition-all duration-150 hover:bg-slate-600 active:bg-slate-500"
+          >
+            +
+          </button>
+        </div>
+      </div>
     </div>
+  )
+
+  const values = {
+    responsibilities,
+  }
+
+  return { ui, values }
+}
+
+export function EducationSection() {
+  const labelClass =
+    'mb-2 block text-xs font-medium tracking-wide text-slate-400 uppercase'
+  const inputClass =
+    'w-full rounded-lg border border-slate-700 bg-slate-800 px-3 py-2.5 text-sm text-slate-100 placeholder-slate-500 transition-all duration-150 focus:border-blue-500 focus:outline-none'
+    return (
+      <div className="space-y-4 border-t border-slate-700 px-4 py-6">
+        <div>
+          <InputField
+            id="institution"
+            label="Institution Name"
+            inputClass={inputClass}
+            labelClass={labelClass}
+          />
+        </div>
+        <div>
+          <InputField
+            id="degree"
+            label="Degree"
+            inputClass={inputClass}
+            labelClass={labelClass}
+          />
+        </div>
+        <div className="grid grid-cols-2 gap-4">
+          <div>
+            <InputField
+              id="startDate"
+              label="Start Date"
+              type="date"
+              inputClass={inputClass}
+              labelClass={labelClass}
+            />
+          </div>
+          <div>
+            <InputField
+              id="endDate"
+              label="End Date"
+              type="date"
+              inputClass={inputClass}
+              labelClass={labelClass}
+            />
+          </div>
+        </div>
+      </div>
+    )
+}
+
+export function AddSubSectionBtn({children, openSubSection }) {
+  return(
+    <>
+    {openSubSection && children}
+    </>
   )
 }
