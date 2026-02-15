@@ -4,10 +4,18 @@
   --font-sans: 'Inter', ui-sans-serif, system-ui, sans-serif;
 }
 
-body {
-  font-family: var(--font-sans);
+html.light body {
+  background-color: #ffffff;
+  color: #0f172a;
+}
+
+html.dark body {
   background-color: #0f172b;
   color: #f1f5f9;
+}
+
+body {
+  font-family: var(--font-sans);
 }
 
 ::-webkit-scrollbar {
@@ -21,6 +29,31 @@ body {
 ::-webkit-scrollbar-thumb {
   background: #334155;
   border-radius: 4px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+@media print {
+  body {
+    background-color: white;
+    color: black;
+  }
+
+  .no-print {
+    display: none !important;
+  }
+
+  [data-resume-preview] {
+    page-break-after: avoid;
+  }
 }
 
 ::-webkit-scrollbar-thumb:hover {
