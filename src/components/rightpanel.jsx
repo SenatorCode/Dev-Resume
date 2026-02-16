@@ -135,41 +135,53 @@ function ResumePreview({ resumeData }) {
   const dummyData = {
     profile: {
       fullName: "Developer's Name",
-      jobTitle: 'Full Stack Developer',
-      email: 'someDeveloper@email.com',
-      phone: '+123 (111) 123-4567',
-      location: 'San Francisco, CA',
+      jobTitle: 'Senior Full Stack Engineer',
+      email: 'your-mail@example.com',
+      phone: '+111 (123) 456-7890',
+      location: 'Barley, North Pole',
       summary:
-        'Experienced full-stack developer with 5+ years building scalable web applications using modern technologies. Passionate about clean code and user experience. Skilled at collaborating across teams to deliver high-quality products, mentor junior engineers, and continuously improve delivery processes. Open-source contributor and speaker at local meetups.',
+        'Senior Full Stack Engineer with 7+ years of experience delivering customer-facing web applications. Strong background in React and Node.js, with a focus on performance, accessibility, and developer experience. Led cross-functional teams to deliver measurable business outcomes and mentored engineers to grow technical skills and ownership. Active open-source contributor and frequent speaker on frontend engineering topics.',
     },
     links: {
-      linkedin: 'https://linkedin.com/in/yourprofile',
-      github: 'https://github.com/yourusername',
-      website: 'https://yourportfolio.com',
+      linkedin: 'https://linkedin.com/in/your-profile-account',
+      github: 'https://github.com/alextaylor',
+      website: 'https://your-portfolio.dev',
+      twitter: 'https://x.com/your-x-profile-name',
     },
     experiences: [
       {
         id: 1,
-        position: 'Senior Developer',
-        company: 'Tech Company Inc.',
-        startDate: '2022-01-01',
-        endDate: '2024-12-31',
+        position: 'Senior Full Stack Engineer',
+        company: 'Legacy Solutions',
+        startDate: '2021-08-01',
+        endDate: '2024-02-28',
         responsibilities: [
-          'Led frontend architecture redesign',
-          'Mentored junior developers',
-          'Improved app performance by 40%',
+          'Architected and led the rewrite of the main customer web app from Backbone to React, reducing page load time by 55%.',
+          'Designed component library and developer guidelines adopted across the engineering org, saving ~20% implementation time for new features.',
+          'Mentored 6+ engineers and ran bi-weekly technical review sessions to improve code quality and design.',
         ],
       },
       {
         id: 2,
         position: 'Full Stack Developer',
-        company: 'StartUp LLC',
-        startDate: '2020-06-01',
-        endDate: '2021-12-31',
+        company: 'Legacy Company LLC',
+        startDate: '2018-05-01',
+        endDate: '2021-07-31',
         responsibilities: [
-          'Built customer dashboard',
-          'Implemented real-time notifications',
-          'Maintained CI/CD pipeline',
+          'Built high-availability REST APIs in Node.js and PostgreSQL serving 200k+ monthly users.',
+          'Implemented feature-flag driven releases and CI/CD pipelines, decreasing production incidents by 30%.',
+          'Collaborated with product and design to prototype and ship accessible UI improvements.',
+        ],
+      },
+      {
+        id: 3,
+        position: 'Frontend Engineer',
+        company: 'Legacy Company',
+        startDate: '2016-07-01',
+        endDate: '2018-04-30',
+        responsibilities: [
+          'Developed responsive interfaces with vanilla JS and modern build tools.',
+          'Improved mobile performance and accessibility for legacy product lines.',
         ],
       },
     ],
@@ -177,32 +189,70 @@ function ResumePreview({ resumeData }) {
       {
         id: 1,
         degree: 'B.S. Computer Science',
-        institution: 'University of California',
-        startDate: '2016-09-01',
-        endDate: '2020-05-31',
+        institution: 'University of Computer Science, Barely',
+        startDate: '2012-09-01',
+        endDate: '2016-05-31',
+        honors: "Dean's List, Graduated Cum Laude",
       },
     ],
     skills: {
       languages: {
         label: 'Languages',
-        skills: ['JavaScript', 'Python', 'TypeScript', 'HTML/CSS', 'SQL'],
+        skills: ['JavaScript', 'TypeScript', 'Python', 'SQL'],
       },
       frameworks: {
         label: 'Frameworks',
-        skills: ['React', 'Node.js', 'Express', 'Django', 'Next.js'],
+        skills: ['React', 'Next.js', 'Node.js', 'Express', 'Django'],
+      },
+      testing: {
+        label: 'Testing',
+        skills: ['Jest', 'React Testing Library', 'Cypress'],
+      },
+      infra: {
+        label: 'Infrastructure',
+        skills: ['AWS (Lambda, ECS)', 'Docker', 'Terraform', 'CI/CD'],
       },
       tools: {
         label: 'Tools',
-        skills: ['Git', 'Docker', 'AWS', 'MongoDB', 'PostgreSQL', 'VS Code'],
+        skills: ['Git', 'VS Code', 'Sentry', 'Datadog'],
       },
     },
     projects: [
       {
         id: 1,
-        name: 'Sample Project',
+        name: 'Realtime Analytics Dashboard',
         description:
-          'A small sample project demonstrating how projects are displayed in the preview and print output.',
-        url: 'https://example.com',
+          'Built a realtime analytics dashboard for monitoring user engagement across product funnels. Implemented websocket-backed updates, server-side aggregation, and a performant React UI.',
+        url: 'https://some-analytics.example.com',
+        details: [
+          'Designed and implemented WebSocket-based real-time data streaming with sub-second latency',
+          'Optimized React components for performance, reducing re-renders by 60% with proper memoization',
+          'Set up data aggregation pipelines to process 1M+ events per minute',
+        ],
+      },
+      {
+        id: 2,
+        name: 'Payments Microservice',
+        description:
+          'Designed and implemented a payments microservice to handle subscriptions, refunds, and billing webhooks. Focused on reliability and observability.',
+        url: 'https://github.com/a-github-repo/payments-ms',
+        details: [
+          'Built fault-tolerant payment processing with 99.9% uptime SLA',
+          'Integrated with Stripe and PayPal APIs for multi-provider support',
+          'Implemented comprehensive logging and monitoring with Datadog',
+        ],
+      },
+      {
+        id: 3,
+        name: 'Open-source UI Component Library',
+        description:
+          'Maintained an open-source component library used by multiple teams; added accessibility features and performance optimizations.',
+        url: 'https://github.com/some-repos/ui-library',
+        details: [
+          'Created 50+ reusable React components following WAI-ARIA accessibility standards',
+          'Documented API with Storybook, reducing onboarding time for new contributors',
+          'Grew community to 2K+ GitHub stars with 100+ monthly contributors',
+        ],
       },
     ],
   }
@@ -464,6 +514,15 @@ function ResumePreview({ resumeData }) {
                     <p className="font-semibold text-gray-900">{p.name}</p>
                     {p.description && (
                       <p className="text-xs text-gray-600">{p.description}</p>
+                    )}
+                    {p.details && p.details.length > 0 && (
+                      <ul className="mt-1 list-inside space-y-0.5 text-xs text-gray-700">
+                        {p.details.map((detail, idx) => (
+                          <li key={idx} className="list-disc">
+                            {detail}
+                          </li>
+                        ))}
+                      </ul>
                     )}
                     {p.url && (
                       <a

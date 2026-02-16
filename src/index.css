@@ -42,7 +42,6 @@ body {
 }
 
 @media print {
-  /* Clean up the page */
   body {
     background: white;
     color: black;
@@ -50,25 +49,25 @@ body {
     padding: 0;
   }
 
-  /* Hide UI controls and non-content elements */
+  /* To hide UI controls and non-content elements */
   header,
   footer {
     display: none !important;
   }
 
-  /* Hide the left panel (form inputs) */
+  /* To hide the left panel */
   body > #root > div > div > div:first-child {
     display: none !important;
   }
 
-  /* Ensure the main containers are block-level and visible */
+  /* To ensure the main containers are block-level and visible */
   body > #root > div,
   body > #root > div > div {
     display: block !important;
     overflow: visible !important;
   }
 
-  /* Show the right panel */
+  /* To show the right panel */
   body > #root > div > div > div:last-child {
     display: block !important;
     overflow: visible !important;
@@ -78,13 +77,13 @@ body {
     min-height: auto;
   }
 
-  /* Hide the RightPanel header with controls - be very specific */
+  /* To hide the RightPanel header with controls */
   body > #root > div > div > div:last-child > div:first-child,
   [class*='flex'][class*='items-center'][class*='justify-between'][class*='border-b'] {
     display: none !important;
   }
 
-  /* Show the scrollable preview container and remove overflow */
+  /* To show the scrollable preview container and remove overflow */
   body > #root > div > div > div:last-child > div:last-child {
     display: block !important;
     overflow: visible !important;
@@ -93,7 +92,7 @@ body {
     margin: 0;
   }
 
-  /* CRITICAL: Remove the scale transform that was hiding the preview */
+  /* To remove the scale transform that was hiding the preview */
   body > #root > div > div > div:last-child > div:last-child > div {
     transform: scale(1) !important;
     transform-origin: top center !important;
@@ -117,7 +116,7 @@ body {
     overflow: visible;
   }
 
-  /* Print: increase spacing between contact items (location/email/phone) */
+  /* To increase spacing between contact items during the print dialog(location/email/phone) */
   [data-resume-preview] .contact-info {
     display: flex !important;
     gap: 1rem !important;

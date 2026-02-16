@@ -487,9 +487,13 @@ export function ProjectsSection({ isDark = true }) {
   const [projects, setProjects] = useState([])
   const [editing, setEditing] = useState(null)
   const [modalNameOpen, setModalNameOpen] = useState(false)
+  const [detailsModalOpen, setDetailsModalOpen] = useState(false)
+  const [editingDetails, setEditingDetails] = useState(null)
 
   const [modalName, setModalName] = useState('')
   const [modalUrl, setModalUrl] = useState('')
+  const [modalDetails, setModalDetails] = useState([])
+  const [detailInput, setDetailInput] = useState('')
 
   const labelClass = getLabelClass(isDark)
   const inputClass = getInputClass(isDark)
@@ -499,16 +503,24 @@ export function ProjectsSection({ isDark = true }) {
     if (editing) {
       setProjects((prev) =>
         prev.map((p) =>
-          p.id === editing.id ? { ...p, name: modalName, url: modalUrl } : p,
+          p.id === editing.id
+            ? { ...p, name: modalName, url: modalUrl, details: modalDetails }
+            : p,
         ),
       )
       setEditing(null)
     } else {
-      const newP = { id: Date.now(), name: modalName, url: modalUrl }
+      const newP = {
+        id: Date.now(),
+        name: modalName,
+        url: modalUrl,
+        details: modalDetails,
+      }
       setProjects((prev) => [...prev, newP])
     }
     setModalName('')
     setModalUrl('')
+    setModalDetails([])
     setModalNameOpen(false)
   }
 
@@ -516,11 +528,22 @@ export function ProjectsSection({ isDark = true }) {
     setEditing(p)
     setModalName(p.name)
     setModalUrl(p.url || '')
+    setModalDetails(p.details || [])
     setModalNameOpen(true)
   }
 
   const handleRemove = (id) =>
     setProjects((prev) => prev.filter((p) => p.id !== id))
+
+  const handleAddDetail = () => {
+    if (!detailInput.trim()) return
+    setModalDetails((prev) => [...prev, detailInput])
+    setDetailInput('')
+  }
+
+  const handleRemoveDetail = (index) => {
+    setModalDetails((prev) => prev.filter((_, i) => i !== index))
+  }
 
   const ui = (
     <div
@@ -571,6 +594,16 @@ export function ProjectsSection({ isDark = true }) {
                   {p.url}
                 </p>
               )}
+              {p.details && p.details.length > 0 && (
+                <ul
+                  className="mt-2 space-y-1 text-xs"
+                  style={{ color: isDark ? '#94A3B8' : '#64748B' }}
+                >
+                  {p.details.map((detail, idx) => (
+                    <li key={idx}>• {detail}</li>
+                  ))}
+                </ul>
+              )}
             </div>
           ))}
         </div>
@@ -598,7 +631,7 @@ export function ProjectsSection({ isDark = true }) {
       {modalNameOpen && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50">
           <div
-            className="w-full max-w-md rounded-lg p-6 shadow-lg"
+            className="max-h-[80vh] w-full max-w-md overflow-y-auto rounded-lg p-6 shadow-lg"
             style={{
               border: `1px solid ${isDark ? '#334155' : '#E2E8F0'}`,
               backgroundColor: isDark ? '#1e293b' : '#FFFFFF',
@@ -625,6 +658,57 @@ export function ProjectsSection({ isDark = true }) {
               onChange={(e) => setModalUrl(e.target.value)}
               className={`${inputClass} mb-4`}
             />
+
+            <div className="mb-4">
+              <label className={labelClass}>Key Details (optional)</label>
+              <div className="mt-2 space-y-2">
+                {modalDetails.length > 0 && (
+                  <ul className="mb-3 space-y-1">
+                    {modalDetails.map((detail, idx) => (
+                      <li
+                        key={idx}
+                        className="flex items-start justify-between rounded p-2"
+                        style={{
+                          backgroundColor: isDark ? '#0f172a' : '#f1f5f9',
+                        }}
+                      >
+                        <span
+                          className="text-sm"
+                          style={{ color: isDark ? '#f1f5f9' : '#0f172a' }}
+                        >
+                          • {detail}
+                        </span>
+                        <button
+                          onClick={() => handleRemoveDetail(idx)}
+                          className="ml-2"
+                          style={{ color: isDark ? '#94a3b8' : '#64748b' }}
+                        >
+                          ✕
+                        </button>
+                      </li>
+                    ))}
+                  </ul>
+                )}
+                <div className="flex gap-2">
+                  <input
+                    type="text"
+                    placeholder="Add detail..."
+                    value={detailInput}
+                    onChange={(e) => setDetailInput(e.target.value)}
+                    onKeyDown={(e) => e.key === 'Enter' && handleAddDetail()}
+                    className={inputClass}
+                  />
+                  <button
+                    onClick={handleAddDetail}
+                    disabled={!detailInput.trim()}
+                    className="rounded bg-blue-500 px-3 py-2 text-sm text-white hover:bg-blue-600 disabled:opacity-50"
+                  >
+                    Add
+                  </button>
+                </div>
+              </div>
+            </div>
+
             <div className="flex justify-end gap-2">
               <button
                 onClick={() => {
