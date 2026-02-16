@@ -216,7 +216,7 @@ function ResumePreview({ resumeData }) {
           {displayProfile.jobTitle || 'Job Title'}
         </p>
 
-        <div className="mt-3 flex flex-wrap gap-x-6 text-xs text-gray-700">
+        <div className="contact-info mt-3 flex flex-wrap gap-x-6 text-xs text-gray-700">
           {displayProfile.location && (
             <span className="flex items-center gap-1">
               <MapPin size={14} className="flex-shrink-0" />
@@ -325,9 +325,7 @@ function ResumePreview({ resumeData }) {
               <h2 className="mb-2 border-b border-gray-300 pb-1 text-xs font-bold tracking-wide text-gray-900 uppercase">
                 Summary
               </h2>
-              <p className="line-clamp-4 text-xs text-gray-700">
-                {displayProfile.summary}
-              </p>
+              <p className="text-xs text-gray-700">{displayProfile.summary}</p>
             </div>
           )}
 
