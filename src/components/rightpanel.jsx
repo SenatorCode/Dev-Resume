@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { ZoomIn, ZoomOut, Printer } from 'lucide-react'
+import { ZoomIn, ZoomOut, Printer, MapPin, Mail, Phone } from 'lucide-react'
 
 export default function RightPanel({ resumeData, isDark }) {
   const [zoom, setZoom] = useState(100)
@@ -17,7 +17,7 @@ export default function RightPanel({ resumeData, isDark }) {
 
   return (
     <div
-      className="flex h-screen flex-col overflow-hidden border-l"
+      className="flex h-full min-h-0 flex-col overflow-hidden border-l"
       style={{
         borderColor: isDark ? '#334155' : '#E2E8F0',
         backgroundColor: isDark ? '#0F172A' : '#FFFFFF',
@@ -86,7 +86,7 @@ export default function RightPanel({ resumeData, isDark }) {
       </div>
 
       <div
-        className="flex-1 overflow-auto p-4"
+        className="min-h-0 flex-1 overflow-x-hidden overflow-y-auto p-4"
         style={{
           backgroundColor: isDark ? '#020617' : '#F8F9FA',
         }}
@@ -107,34 +107,44 @@ export default function RightPanel({ resumeData, isDark }) {
   )
 }
 
-function ResumePreview({ resumeData, isDark }) {
+function ResumePreview({ resumeData }) {
   const profile = resumeData?.personalProfile || {}
   const links = resumeData?.links || {}
   const skills = resumeData?.skills || {}
   const experiences = resumeData?.experience || []
   const educations = resumeData?.education || []
 
+  // Check if user has entered any meaningful content
   const hasContent =
-    Object.values(profile).some((v) => v) ||
-    Object.values(links).some((v) => v) ||
-    Object.values(skills).some((v) => v) ||
+    (profile.fullName?.trim() !== '' && profile.fullName) ||
+    (profile.jobTitle?.trim() !== '' && profile.jobTitle) ||
+    (profile.email?.trim() !== '' && profile.email) ||
+    (profile.phone?.trim() !== '' && profile.phone) ||
+    (profile.location?.trim() !== '' && profile.location) ||
+    (profile.summary?.trim() !== '' && profile.summary) ||
+    (links.linkedin?.trim() !== '' && links.linkedin) ||
+    (links.github?.trim() !== '' && links.github) ||
+    (links.website?.trim() !== '' && links.website) ||
+    (links.twitter?.trim() !== '' && links.twitter) ||
+    links.custom?.length > 0 ||
+    Object.values(skills).some((cat) => cat?.skills?.length > 0) ||
     experiences.length > 0 ||
     educations.length > 0
 
   const dummyData = {
     profile: {
-      fullName: 'Alex Rivera',
+      fullName: "Developer's Name",
       jobTitle: 'Full Stack Developer',
-      email: 'alex.rivera@email.com',
-      phone: '+1 (555) 123-4567',
+      email: 'someDeveloper@email.com',
+      phone: '+123 (111) 123-4567',
       location: 'San Francisco, CA',
       summary:
-        'Experienced full-stack developer with 5+ years building scalable web applications using modern technologies. Passionate about clean code and user experience.',
+        'Experienced full-stack developer with 5+ years building scalable web applications using modern technologies. Passionate about clean code and user experience. Skilled at collaborating across teams to deliver high-quality products, mentor junior engineers, and continuously improve delivery processes. Open-source contributor and speaker at local meetups.',
     },
     links: {
-      linkedin: 'https://linkedin.com/in/alexrivera',
-      github: 'https://github.com/alexrivera',
-      website: 'https://alexrivera.dev',
+      linkedin: 'https://linkedin.com/in/yourprofile',
+      github: 'https://github.com/yourusername',
+      website: 'https://yourportfolio.com',
     },
     experiences: [
       {
@@ -192,6 +202,9 @@ function ResumePreview({ resumeData, isDark }) {
   const displaySkills = hasContent ? skills : dummyData.skills
   const displayExperiences = hasContent ? experiences : dummyData.experiences
   const displayEducations = hasContent ? educations : dummyData.educations
+  const displayProjects = hasContent
+    ? resumeData?.projects || []
+    : dummyData.projects
 
   return (
     <div data-resume-preview className="flex h-full flex-col bg-white">
@@ -206,12 +219,13 @@ function ResumePreview({ resumeData, isDark }) {
         <div className="mt-3 flex flex-wrap gap-x-6 text-xs text-gray-700">
           {displayProfile.location && (
             <span className="flex items-center gap-1">
-              📍 {displayProfile.location}
+              <MapPin size={14} className="flex-shrink-0" />
+              {displayProfile.location}
             </span>
           )}
           {displayProfile.email && (
             <span className="flex items-center gap-1">
-              ✉️{' '}
+              <Mail size={14} className="flex-shrink-0" />
               <a
                 href={`mailto:${displayProfile.email}`}
                 className="text-blue-600 hover:underline"
@@ -220,49 +234,85 @@ function ResumePreview({ resumeData, isDark }) {
               </a>
             </span>
           )}
-          {displayProfile.phone && <span>📱 {displayProfile.phone}</span>}
+          {displayProfile.phone && (
+            <span className="flex items-center gap-1">
+              <Phone size={14} className="flex-shrink-0" />
+              {displayProfile.phone}
+            </span>
+          )}
         </div>
 
-        <div className="mt-3 flex flex-wrap gap-3 text-xs">
+        <div className="mt-3 flex flex-col gap-1 text-xs">
           {displayLinks.linkedin && (
-            <a
-              href={displayLinks.linkedin}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="text-blue-600 hover:underline"
-            >
-              LinkedIn
-            </a>
+            <div className="flex items-center gap-1">
+              <span className="font-semibold text-gray-700">LinkedIn:</span>
+              <a
+                href={displayLinks.linkedin}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="break-all text-blue-600 hover:underline"
+              >
+                {displayLinks.linkedin}
+              </a>
+            </div>
           )}
           {displayLinks.github && (
-            <a
-              href={displayLinks.github}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="text-blue-600 hover:underline"
-            >
-              GitHub
-            </a>
+            <div className="flex items-center gap-1">
+              <span className="font-semibold text-gray-700">GitHub:</span>
+              <a
+                href={displayLinks.github}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="break-all text-blue-600 hover:underline"
+              >
+                {displayLinks.github}
+              </a>
+            </div>
           )}
           {displayLinks.website && (
-            <a
-              href={displayLinks.website}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="text-blue-600 hover:underline"
-            >
-              Portfolio
-            </a>
+            <div className="flex items-center gap-1">
+              <span className="font-semibold text-gray-700">Portfolio:</span>
+              <a
+                href={displayLinks.website}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="break-all text-blue-600 hover:underline"
+              >
+                {displayLinks.website}
+              </a>
+            </div>
           )}
           {displayLinks.twitter && (
-            <a
-              href={displayLinks.twitter}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="text-blue-600 hover:underline"
-            >
-              X
-            </a>
+            <div className="flex items-center gap-1">
+              <span className="font-semibold text-gray-700">X/Twitter:</span>
+              <a
+                href={displayLinks.twitter}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="break-all text-blue-600 hover:underline"
+              >
+                {displayLinks.twitter}
+              </a>
+            </div>
+          )}
+          {displayLinks.custom && displayLinks.custom.length > 0 && (
+            <div className="mt-2 space-y-1">
+              {displayLinks.custom.map((link) => (
+                <div key={link.id} className="flex items-center gap-1">
+                  <span className="font-semibold text-gray-700">
+                    {link.label}:
+                  </span>
+                  <a
+                    href={link.url}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="break-all text-blue-600 hover:underline"
+                  >
+                    {link.url}
+                  </a>
+                </div>
+              ))}
+            </div>
           )}
         </div>
       </div>
@@ -308,13 +358,13 @@ function ResumePreview({ resumeData, isDark }) {
 
         {/* Right Column - Main Content */}
         <div className="space-y-4">
-          {experiences.length > 0 && (
+          {displayExperiences.length > 0 && (
             <div>
               <h2 className="mb-2 border-b border-gray-300 pb-1 text-xs font-bold tracking-wide text-gray-900 uppercase">
                 Experience
               </h2>
               <div className="space-y-2">
-                {experiences.map((exp) => (
+                {displayExperiences.map((exp) => (
                   <div key={exp.id}>
                     <div className="flex items-start justify-between">
                       <div>
@@ -357,13 +407,13 @@ function ResumePreview({ resumeData, isDark }) {
             </div>
           )}
 
-          {educations.length > 0 && (
+          {displayEducations.length > 0 && (
             <div>
               <h2 className="mb-2 border-b border-gray-300 pb-1 text-xs font-bold tracking-wide text-gray-900 uppercase">
                 Education
               </h2>
               <div className="space-y-2">
-                {educations.map((edu) => (
+                {displayEducations.map((edu) => (
                   <div key={edu.id}>
                     <div className="flex items-start justify-between">
                       <div>
@@ -390,6 +440,33 @@ function ResumePreview({ resumeData, isDark }) {
                           )}`}
                       </p>
                     </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
+          {displayProjects && displayProjects.length > 0 && (
+            <div className="mt-4">
+              <h2 className="mb-2 border-b border-gray-300 pb-1 text-xs font-bold tracking-wide text-gray-900 uppercase">
+                Projects
+              </h2>
+              <div className="space-y-2">
+                {displayProjects.map((p) => (
+                  <div key={p.id}>
+                    <p className="font-semibold text-gray-900">{p.name}</p>
+                    {p.description && (
+                      <p className="text-xs text-gray-600">{p.description}</p>
+                    )}
+                    {p.url && (
+                      <a
+                        href={p.url}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="text-xs text-blue-600 hover:underline"
+                      >
+                        {p.url}
+                      </a>
+                    )}
                   </div>
                 ))}
               </div>

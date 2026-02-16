@@ -483,6 +483,177 @@ export function LinksSection({ isDark = true }) {
   return { ui, values: links }
 }
 
+export function ProjectsSection({ isDark = true }) {
+  const [projects, setProjects] = useState([])
+  const [editing, setEditing] = useState(null)
+  const [modalNameOpen, setModalNameOpen] = useState(false)
+
+  const [modalName, setModalName] = useState('')
+  const [modalUrl, setModalUrl] = useState('')
+
+  const labelClass = getLabelClass(isDark)
+  const inputClass = getInputClass(isDark)
+
+  const handleAddOrUpdate = () => {
+    if (!modalName.trim()) return
+    if (editing) {
+      setProjects((prev) =>
+        prev.map((p) =>
+          p.id === editing.id ? { ...p, name: modalName, url: modalUrl } : p,
+        ),
+      )
+      setEditing(null)
+    } else {
+      const newP = { id: Date.now(), name: modalName, url: modalUrl }
+      setProjects((prev) => [...prev, newP])
+    }
+    setModalName('')
+    setModalUrl('')
+    setModalNameOpen(false)
+  }
+
+  const handleEdit = (p) => {
+    setEditing(p)
+    setModalName(p.name)
+    setModalUrl(p.url || '')
+    setModalNameOpen(true)
+  }
+
+  const handleRemove = (id) =>
+    setProjects((prev) => prev.filter((p) => p.id !== id))
+
+  const ui = (
+    <div
+      className="space-y-4 border-t px-4 py-6"
+      style={{ borderColor: isDark ? '#334155' : '#E2E8F0' }}
+    >
+      {projects.length > 0 && (
+        <div className="space-y-2">
+          <p className={labelClass}>Projects</p>
+          {projects.map((p) => (
+            <div
+              key={p.id}
+              className="rounded-lg border p-3"
+              style={{
+                borderColor: isDark ? '#334155' : '#E2E8F0',
+                backgroundColor: isDark ? '#1e293b' : '#FFFFFF',
+              }}
+            >
+              <div className="mb-2 flex items-center justify-between">
+                <span
+                  className={'text-sm font-medium'}
+                  style={{ color: isDark ? '#F1F5F9' : '#0F172A' }}
+                >
+                  {p.name}
+                </span>
+                <div className="flex gap-2">
+                  <button
+                    onClick={() => handleEdit(p)}
+                    className="p-1"
+                    style={{ color: isDark ? '#94A3B8' : '#64748B' }}
+                  >
+                    <Edit2 size={14} />
+                  </button>
+                  <button
+                    onClick={() => handleRemove(p.id)}
+                    className="p-1"
+                    style={{ color: isDark ? '#94A3B8' : '#64748B' }}
+                  >
+                    <Trash2 size={14} />
+                  </button>
+                </div>
+              </div>
+              {p.url && (
+                <p
+                  className="truncate text-xs"
+                  style={{ color: isDark ? '#94A3B8' : '#64748B' }}
+                >
+                  {p.url}
+                </p>
+              )}
+            </div>
+          ))}
+        </div>
+      )}
+
+      <div className="flex items-center justify-end gap-2 pt-4">
+        <button
+          onClick={() => {
+            setEditing(null)
+            setModalName('')
+            setModalUrl('')
+            setModalNameOpen(true)
+          }}
+          className="cursor-pointer rounded-lg px-5 py-2.5 text-sm font-semibold transition-all duration-200"
+          style={{
+            border: `1px solid ${isDark ? '#334155' : '#E2E8F0'}`,
+            backgroundColor: isDark ? '#1e293b' : '#FFFFFF',
+            color: isDark ? '#F1F5F9' : '#0F172A',
+          }}
+        >
+          Add New Project
+        </button>
+      </div>
+
+      {modalNameOpen && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50">
+          <div
+            className="w-full max-w-md rounded-lg p-6 shadow-lg"
+            style={{
+              border: `1px solid ${isDark ? '#334155' : '#E2E8F0'}`,
+              backgroundColor: isDark ? '#1e293b' : '#FFFFFF',
+            }}
+          >
+            <h2
+              className="mb-4 text-lg font-semibold"
+              style={{ color: isDark ? '#F1F5F9' : '#0F172A' }}
+            >
+              {editing ? 'Edit Project' : 'Add Project'}
+            </h2>
+            <input
+              type="text"
+              placeholder="Project name"
+              value={modalName}
+              onChange={(e) => setModalName(e.target.value)}
+              className={`${inputClass} mb-4`}
+              autoFocus
+            />
+            <input
+              type="text"
+              placeholder="Project URL (optional)"
+              value={modalUrl}
+              onChange={(e) => setModalUrl(e.target.value)}
+              className={`${inputClass} mb-4`}
+            />
+            <div className="flex justify-end gap-2">
+              <button
+                onClick={() => {
+                  setModalNameOpen(false)
+                }}
+                className="rounded border px-4 py-2"
+                style={{
+                  borderColor: isDark ? '#334155' : '#E2E8F0',
+                  color: isDark ? '#F1F5F9' : '#0F172A',
+                }}
+              >
+                Cancel
+              </button>
+              <button
+                onClick={handleAddOrUpdate}
+                className="rounded bg-blue-500 px-4 py-2 text-white"
+              >
+                {editing ? 'Save' : 'Add'}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+    </div>
+  )
+
+  return { ui, values: { projects } }
+}
+
 export function SkillsSection({ isDark = true }) {
   const [customCategories, setCustomCategories] = useState([])
   const [showModal, setShowModal] = useState(false)
@@ -637,7 +808,6 @@ export function SkillsSection({ isDark = true }) {
 
 function SkillSubsection({
   label,
-  categoryId,
   skills,
   onAddSkill,
   onRemoveSkill,
@@ -827,6 +997,7 @@ export function ExperienceSection({ isDark = true }) {
           }
           labelClass={labelClass}
           inputClass={inputClass}
+          isDark={isDark}
         />
       ))}
 
@@ -858,6 +1029,7 @@ function ExperienceEntry({
   onRemoveResponsibility,
   labelClass,
   inputClass,
+  isDark = true,
 }) {
   const [inputValue, setInputValue] = useState('')
 
@@ -1111,6 +1283,7 @@ export function EducationSection({ isDark = true }) {
           }
           labelClass={labelClass}
           inputClass={inputClass}
+          isDark={isDark}
         />
       ))}
 
@@ -1140,6 +1313,7 @@ function EducationEntry({
   onUpdate,
   labelClass,
   inputClass,
+  isDark = true,
 }) {
   const dateError =
     education.startDate &&

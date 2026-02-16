@@ -1,25 +1,17 @@
-import { Braces, Sun, Moon, Download } from 'lucide-react'
+import { Braces, Sun, Moon, Download, Eye } from 'lucide-react'
 
-export default function Header({ isDark, onThemeToggle }) {
+export default function Header({ isDark, onThemeToggle, onShowPreview }) {
   const handleDownloadPDF = () => {
     const element = document.querySelector('[data-resume-preview]')
     if (!element) {
-      alert('No resume to download')
+      alert('Resume preview not found. Please ensure the preview is loaded.')
       return
     }
-    const html2pdf = window.html2pdf
-    if (!html2pdf) {
-      alert('PDF library not loaded')
-      return
-    }
-    const options = {
-      margin: 10,
-      filename: 'resume.pdf',
-      image: { type: 'jpeg', quality: 0.98 },
-      html2canvas: { scale: 2 },
-      jsPDF: { orientation: 'portrait', unit: 'mm', format: 'a4' },
-    }
-    html2pdf().set(options).from(element).save()
+
+    // Giving the browser a moment to prepare, then open print dialog
+    setTimeout(() => {
+      window.print()
+    }, 100)
   }
 
   return (
@@ -71,11 +63,32 @@ export default function Header({ isDark, onThemeToggle }) {
             className="h-6 w-px"
             style={{ backgroundColor: isDark ? '#334155' : '#E2E8F0' }}
           ></div>
+          {onShowPreview && (
+            <>
+              <button
+                onClick={onShowPreview}
+                className="inline-flex cursor-pointer items-center gap-2 rounded-lg border px-4 py-2.5 text-sm font-semibold transition-all duration-200 lg:hidden"
+                style={{
+                  borderColor: isDark ? '#334155' : '#E2E8F0',
+                  backgroundColor: isDark ? '#1e293b' : '#F1F5F9',
+                  color: isDark ? '#F1F5F9' : '#0F172A',
+                }}
+                title="Show Preview"
+              >
+                <Eye className="h-4 w-4" /> Preview
+              </button>
+              <div
+                className="h-6 w-px lg:hidden"
+                style={{ backgroundColor: isDark ? '#334155' : '#E2E8F0' }}
+              ></div>
+            </>
+          )}
           <button
             onClick={handleDownloadPDF}
             className="inline-flex cursor-pointer items-center gap-2 rounded-lg bg-blue-500 px-5 py-2.5 text-sm font-semibold text-white transition-all duration-200 hover:bg-blue-600 active:bg-blue-800"
           >
-            <Download className="h-4 w-4" /> Download PDF
+            <Download className="h-4 w-4" />
+            Print PDF
           </button>
         </div>
       </div>

@@ -4,25 +4,25 @@ export default function Footer({ isDark }) {
   const links = [
     {
       icon: Github,
-      url: 'https://github.com/senatorCode',
+      url: 'https://github.com/SenatorCode',
       label: 'GitHub Profile',
       title: 'My GitHub',
     },
     {
       icon: Code,
-      url: 'https://github.com/senatorCode/Dev-Resume',
+      url: 'https://github.com/SenatorCode/Dev-Resume',
       label: 'Repository',
       title: 'Project Repository',
     },
     {
       icon: Linkedin,
-      url: 'https://linkedin.com/in/senatorCode',
+      url: 'www.linkedin.com/in/ibikunle-fawas-olamide-218b8b317',
       label: 'LinkedIn',
       title: 'My LinkedIn',
     },
     {
       icon: Twitter,
-      url: 'https://x.com/senatorCode',
+      url: 'https://x.com/SenatorOlamide',
       label: 'X',
       title: 'My X Profile',
     },

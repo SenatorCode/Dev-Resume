@@ -42,17 +42,84 @@ body {
 }
 
 @media print {
+  /* Clean up the page */
   body {
-    background-color: white;
+    background: white;
     color: black;
+    margin: 0;
+    padding: 0;
   }
 
-  .no-print {
+  /* Hide UI controls and non-content elements */
+  header,
+  footer {
     display: none !important;
   }
 
+  /* Hide the left panel (form inputs) */
+  body > #root > div > div > div:first-child {
+    display: none !important;
+  }
+
+  /* Ensure the main containers are block-level and visible */
+  body > #root > div,
+  body > #root > div > div {
+    display: block !important;
+    overflow: visible !important;
+  }
+
+  /* Show the right panel */
+  body > #root > div > div > div:last-child {
+    display: block !important;
+    overflow: visible !important;
+    border: none;
+    width: 100%;
+    height: auto;
+    min-height: auto;
+  }
+
+  /* Hide the RightPanel header with controls - be very specific */
+  body > #root > div > div > div:last-child > div:first-child,
+  [class*='flex'][class*='items-center'][class*='justify-between'][class*='border-b'] {
+    display: none !important;
+  }
+
+  /* Show the scrollable preview container and remove overflow */
+  body > #root > div > div > div:last-child > div:last-child {
+    display: block !important;
+    overflow: visible !important;
+    min-height: auto;
+    padding: 0;
+    margin: 0;
+  }
+
+  /* CRITICAL: Remove the scale transform that was hiding the preview */
+  body > #root > div > div > div:last-child > div:last-child > div {
+    transform: scale(1) !important;
+    transform-origin: top center !important;
+    width: 8.5in !important;
+    margin: 0 auto !important;
+    margin-bottom: 0 !important;
+    box-shadow: none !important;
+  }
+
+  /* Resume preview styling */
   [data-resume-preview] {
-    page-break-after: avoid;
+    width: 100%;
+    background: white;
+    color: black;
+    display: block !important;
+    overflow: visible;
+  }
+
+  [data-resume-preview] * {
+    display: revert !important;
+    overflow: visible;
+  }
+
+  @page {
+    size: A4;
+    margin: 15mm;
   }
 }
 
