@@ -139,7 +139,7 @@
 - **Features**:
   - App branding (DevResume logo + subtitle)
   - Theme toggle button (Sun/Moon icons)
-  - Download PDF button
+  - Print PDF button
   - Responsive design elements
   - Fixed positioning with proper z-index
   - Themed backgrounds and accents
@@ -148,7 +148,7 @@
 
 - **Status**: Optimized for All Devices
 - **Features**:
-  - Mobile: Single column (form only, no preview)
+  - Mobile: Single column (form only, plus show preview btn)
   - Tablet: Adjustable layout with proper margins
   - Desktop: Full two-column layout
   - `hidden lg:block` for preview on mobile
@@ -156,18 +156,8 @@
   - Font sizes adjust with screen size
   - Touch-friendly button sizing
 
-### 14. ✅ PDF Export
 
-- **Status**: Fully Functional
-- **Features**:
-  - Uses html2pdf.js library
-  - Downloads resume with filename "resume.pdf"
-  - Proper A4 page format
-  - High-quality image rendering
-  - Margins configured for printing
-  - Works with live preview content
-
-### 15. ✅ Accessibility (a11y)
+### 14. ✅ Accessibility (a11y)
 
 - **Status**: Implemented
 - **Features**:
@@ -204,7 +194,6 @@ src/
 - **Vite 7**: Build tool
 - **Tailwind CSS 4**: Utility-first styling
 - **Lucide React**: Icon library
-- **html2pdf.js**: PDF export functionality
 - **localStorage API**: Client-side persistence
 
 ## Data Flow
@@ -257,27 +246,4 @@ src/
 - Smooth transitions and hover states
 - Mobile-friendly responsive design
 
-## Testing Recommendations
-
-1. Test all CRUD operations on each section
-2. Verify localStorage works by:
-   - Adding data
-   - Refreshing page
-   - Confirming data persists
-3. Test theme toggle in all browsers
-4. Print test the resume from preview
-5. Download PDF and verify formatting
-6. Test on mobile, tablet, and desktop
-7. Test with long text inputs
-8. Verify date validation works correctly
-
-## Future Enhancement Ideas
-
-1. Add more resume templates (chronological, etc.)
-2. Implement cloud backup
-3. Add template color schemes
-4. Add more section types (certifications, projects, etc.)
-5. Implement resume import/export as JSON
-6. Add real-time collaboration
-7. Analytics for resume downloads
-8. Signature/profile picture support
+## Built in 2026
