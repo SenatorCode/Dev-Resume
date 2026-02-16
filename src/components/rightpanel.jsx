@@ -129,7 +129,8 @@ function ResumePreview({ resumeData }) {
     links.custom?.length > 0 ||
     Object.values(skills).some((cat) => cat?.skills?.length > 0) ||
     experiences.length > 0 ||
-    educations.length > 0
+    educations.length > 0 ||
+    (resumeData?.projects && resumeData.projects.length > 0)
 
   const dummyData = {
     profile: {
@@ -195,6 +196,15 @@ function ResumePreview({ resumeData }) {
         skills: ['Git', 'Docker', 'AWS', 'MongoDB', 'PostgreSQL', 'VS Code'],
       },
     },
+    projects: [
+      {
+        id: 1,
+        name: 'Sample Project',
+        description:
+          'A small sample project demonstrating how projects are displayed in the preview and print output.',
+        url: 'https://example.com',
+      },
+    ],
   }
 
   const displayProfile = hasContent ? profile : dummyData.profile

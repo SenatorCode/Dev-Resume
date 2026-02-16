@@ -117,6 +117,19 @@ body {
     overflow: visible;
   }
 
+  /* Print: increase spacing between contact items (location/email/phone) */
+  [data-resume-preview] .contact-info {
+    display: flex !important;
+    gap: 1rem !important;
+    flex-wrap: wrap !important;
+    align-items: center !important;
+  }
+
+  [data-resume-preview] .contact-info span,
+  [data-resume-preview] .contact-info a {
+    margin-right: 0.5rem !important;
+  }
+
   @page {
     size: A4;
     margin: 15mm;
