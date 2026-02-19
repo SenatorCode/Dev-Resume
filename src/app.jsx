@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react'
+import { SpeedInsights } from '@vercel/speed-insights/react'
 import Header from './components/header'
 import Footer from './components/footer'
 import RightPanel from './components/rightpanel'
@@ -239,6 +240,7 @@ export default function App() {
       </div>
 
       <Footer isDark={isDark} />
+      <SpeedInsights />
     </div>
   )
 }
